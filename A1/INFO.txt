@@ -1,0 +1,53 @@
+name: Qiyuan He, Yuting Shao
+UtorlID(s): heqiyuan, shaoyuti
+git commit hash: f107fdceb6c855196edbd1588375e0aabd3afa47
+
+
+
+===================================================
+## 1 Minor problems encounterd when reading starter code
+[x] asmlinkage - what is this?
+A: It means "leave it to asm" and don't look at the registers.
+
+[x] All sorts of error numbers/return values
+A: Go look at the handout, done.
+
+[x] How to use spinlock
+A: Go read the spinlock documentaion @https://www.kernel.org/doc/Documentation/locking/spinlocks.txt
+  Also, read tutorial notes.
+
+[x] How to debug? GDB is horrible
+A: (from tutorial & handout) use `printk` KERNEL_DEBUG
+
+[x] What is `pt_regs`?
+A: A data structure, find the word in prof's comments and go look at linux man page.
+
+
+===================================================
+## 2 Design Desicions - coding stage
+### For `my_syscall()`
+Rough work on paper (as well as first typed design in comments) was to handle each 'cmd' individually.
+This require many repeating helpers that check validity. However, after going through [some](https://www.halolinux.us/kernel-architecture/helper-functions.html) [websites](https://www.kernel.org/doc/html/v4.11/gpu/drm-kms-helpers.html), I realize its better to NOT use helper function to perform simple task. In this case, I found it much easier to group all error-checking together prior to "switch". This does simplied the task.
+NOTE: when actually coding, I move ENOMEM error checking into the "switch" block since it involves deeper mechanism.
+
+### For `exit_function`
+Just mimicking multiple 'malloc-free' from CSC209. Not sure if the order matters, but I place the modification of (my metadata/bookkeeping) table before the modification of actual system call table.
+
+### Also for `my_syscall`
+Tons of seemingly unpaired spin_lock/spin_unlock are horrible to read. Try to make critical section shorter by extract necessary information first and store them into auto variables.
+
+===================================================
+## 3 Other Probelms
+Q: When merging file from GIT repo, laptop power-off and result in corrupted local repo.
+A: ... just clone to a new location and re-commit :(
+
+Q: Transfering files between VM and host on student laptop (kubuntu 18 & win 10)
+A: nvm, play with it and it will be ok.
+
+===================================================
+## 4 Some resources for debugging
+### Our dear prof Karen and TAs
+
+### Fellow classmates in CDF lab
+
+### PRINTK and dmesg, also [this page](http://www-numi.fnal.gov/offline_software/srt_public_context/WebDocs/Errors/unix_system_errors.html) for reading error message.
