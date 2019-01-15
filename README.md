@@ -1,5 +1,5 @@
 # UofT-CSC369-Operating-System
-CSC369:Operating System (2019 Fall)
+CSC369:Operating System (2019 Fall)<br>
 These are my assignments for the course "Operating Systems", University of Toronto - St George Campus.<br>
 Assignment1: System Calls<br>
 Assignment2: Synchronization<br>
