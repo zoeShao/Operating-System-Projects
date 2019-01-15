@@ -1,0 +1,30 @@
+Qiyuan He, Yuting Shao
+heqiyuan, shaoyuti
+ed12bd23680cac267cfa142c6105e25bfe5bc14c
+
+
+## Discussion: chance of starvation
+No starvation will occur.
+In this monitor, both the buffer and the lanes are of fixed size. Since the case is trivial if `car_arrive`/`car_cross` thread terminates, only consider situations where both threads has tasks to perform.
+If a lane is empty, its corresponding `car_cross` would be put into sleep so `car_arrive` can produce move more cars into the lane. If a lane is full, `car_arrive` would sleep so `car_cross` moves car into `out_cars` to create more space. Otherwise, the lane would be partially full and either `car_arrive` or `car_cross` gets the acess permission and does its work. Note both threads can only hold the critical section for a limited time since, even in the worst case, a thread keeps acquiring the CS, its work is limited because the buffer/lane is of limited size.
+
+
+## Other Info
+### Problems Solved
+Q: Got the idea of FIFIO, but the order of cars in `schedule.txt` VS order of cars we put into in_cars list?
+A: The parse function would place the last lines in txt to the front of `in_cars`. Put this into comment and continue coding
+
+Q: No output from `helgrind` when program compiles, what's wrong?
+A: Something wrong with monitor. Extra/Missing code snippets regarding condition variables.
+
+
+### Unsolved Problem(s)
+Topic: In car_cross, the exit condition check for all cars has passed.
+Using (l->inc <= 0) is good, but (l -> in_cars == NULL && l -> in_buf == 0) gives wrong sychronization. Shouldn't these two expressions equivalent...?
+
+
+### Design decision: `compute path`
+- `switch --- switch` makes code easier to read than `if --- if`
+- Though unused, the number assigned for quadrants are their orders in car's trail, which is easy to extend for more functions (e.g. lock the quadrants in the order of car path)
+- Inspired by debug technique: `if (DEBUG>N) do somthing, if (DEBUG > N+1) do more thing`
+- more details in in-line comments
